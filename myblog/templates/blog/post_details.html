@@ -24,10 +24,9 @@
 		</div>
 	</form>
 
-	
 	{% for comment in comments %}
 		<div class="col-lg-12 comment">
-			<div class="col-lg-1"><img src="{% static 'images/dp.png' %}" class="img-thumbnail" >
+			<div class="col-lg-1"><img src="{% static 'images/dp.png' %}" class="img-thumbnail">
 			</div>
 			<div class="col-lg-8">
 				<p style="color: blue;font-size: 15px;"><a href=""><b>{{comment.author}}</b></a>
@@ -36,10 +35,10 @@
 				<p class="text-justify">{{comment.comment}}</p>
 			</div>
 			<div class="col-lg-3">
-				<p><button onclick="showDiv()" class="btn btn-sm">edit</button>
+				<p><button onclick="showDiv({{comment.pk}})" class="btn btn-sm">edit</button>
 					<a href="{% url 'delete' pk=comment.pk %}"><button class="btn btn-sm">delete</button></a></p>
 			</div>
-			<div id="mydiv" style="display:none;">
+			<div id="{{comment.pk}}" style="display:none;">
 				<form method="POST" action = "{% url 'edit' pk=comment.pk %}">
 					{% csrf_token %}
 					<div class="form-group">
