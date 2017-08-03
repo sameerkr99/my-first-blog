@@ -3,13 +3,10 @@
 {% block content %}
 <div class="row">
 	<div class="col-md-3">
-		{% for prof in profile %}
-			<img src="{% static 'profilepic/dp.png' %}" height="100px">
-			<img src="">
-		{% endfor %}
+			<img src='/static/{{dp_name}}' class="img-circle" height="200px" width = "200px">
 	</div>
 	<div class="col-md-6">
-		<table class="table">
+		<table class="table table-bordered">
 			<tr>
 				<td>User Name :</td>
 				<td>{{request.user}}</td>
@@ -22,16 +19,16 @@
 				<td>Email :</td>
 				<td>{{request.user.email}}</td>
 			</tr>
-			{% for prof in profile%}
+			
 			<tr>
 				<td>Phone :</td>
-				<td>{{prof.Phone}}</td>
+				<td>{{profile.Phone}}</td>
 			</tr>
 			<tr>
 				<td>Date Of Birth :</td>
-				<td>{{prof.birth}}</td>
+				<td>{{profile.birth}}</td>
 			</tr>
-			{% endfor %}
+			
 		</table>
 	</div>
 </div>

@@ -8,6 +8,7 @@ from django.shortcuts import redirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import UserCreationForm
 import os
+import re
 from django.contrib.auth.models import User
 def myposts(request):
 	post = Post.objects.filter(author = request.user).order_by('publish_date')
@@ -65,8 +66,10 @@ def signup(request):
     return render(request, 'blog/signup.html', {'form': form})
 
 def profile_view(request):
-	profile = Profile.objects.filter(user = request.user)
-	return render(request,'blog/profile.html',{'profile':profile})
+	profile = Profile.objects.get(user = request.user)
+	dp_name = re.search(r'/static/(.*)', str(profile.dp), re.M|re.I)
+	return render(request,'blog/profile.html',{'profile':profile,'dp_name':str(dp_name.group(1))})
+
 def searchresult(request):
 	option = 0
 	if request.method == 'POST':
