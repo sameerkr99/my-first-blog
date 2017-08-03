@@ -1,0 +1,54 @@
+
+p a:hover {
+    color: #555;
+}
+input {
+    font-family: "Helvetica Neue", Helvetica, sans-serif;
+    font-size: 12px;
+    outline: none;
+}
+input[type=text],
+input[type=password],
+input[type=email] {
+    color: #777;
+    padding-left: 10px;
+    margin: 10px;
+    margin-top: 12px;
+    margin-left: 0px;
+    width: 290px;
+    height: 35px;
+}
+div.log {
+            padding : 30px;
+            background: white;
+            border-radius: 20px;
+            padding-left: 60px;
+
+}
+div.post{
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid black;
+}
+div.allposts{
+    padding: 25px;
+    padding-left: 40px;
+    border-radius: 10px;
+    background: #7DE3EB;
+    margin-bottom: 10px;
+}
+.mybutton{ text-align: center; 
+        }
+
+div.profile{
+    font-size: 15px;
+    padding: 10px;
+}
+div.comment{
+    font-size: 12px;
+    padding: 5px;
+    background: white;
+    border: 1px solid black;
+    border-radius: 5px;
+    margin-bottom: 5px;
+}

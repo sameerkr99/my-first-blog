@@ -1,0 +1,58 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+{% block content %}
+<div class="row">
+	<div class="col-lg-8 col-lg-offset-2 allposts">
+	<a href="{% url 'post_details' pk=post.pk %}"><h1>{{post.title}}</h1></a>
+	Author: {{post.author}}
+	<p>Published date :{{post.publish_date}}</p>
+	<p class="text-justify">{{post.text|linebreaksbr}}</p>
+	<p><a href="/home/comments/"><button class="btn btn-default mybutton">Like {{post.like}}</button></a> 
+	</p>
+	{% block comment %}
+	{% endblock %}
+	<form method = 'POST' action = "{% url 'comment' pk=post.pk %}">
+		{% csrf_token %}
+		<div class="form-group col-lg-10">
+			<input type="textarea" name="mycomment" placeholder="comment here..." class="form-control" required/>
+		</div>
+		<div class="form-group">
+			<input type="hidden" name="author" value="{{request.user.first_name}} {{request.user.last_name}}">
+		</div>
+		<div class="form-group col-lg-2">
+			<button type="submit" class="form-control btn btn-primary">comment</button>
+		</div>
+	</form>
+
+	
+	{% for comment in comments %}
+		<div class="col-lg-12 comment">
+			<div class="col-lg-1"><img src="{% static 'images/dp.png' %}" class="img-thumbnail" >
+			</div>
+			<div class="col-lg-8">
+				<p style="color: blue;font-size: 15px;"><a href=""><b>{{comment.author}}</b></a>
+
+				</p>
+				<p class="text-justify">{{comment.comment}}</p>
+			</div>
+			<div class="col-lg-3">
+				<p><button onclick="showDiv()" class="btn btn-sm">edit</button>
+					<a href="{% url 'delete' pk=comment.pk %}"><button class="btn btn-sm">delete</button></a></p>
+			</div>
+			<div id="mydiv" style="display:none;">
+				<form method="POST" action = "{% url 'edit' pk=comment.pk %}">
+					{% csrf_token %}
+					<div class="form-group">
+						<input type="textarea" name="comment" class="form-control" value="{{comment.comment}}">	
+					</div>
+					<div class="form-group">
+						<input type="submit" name="save" value="comment" class="form-control" />
+					</div>
+				</form>
+			</div> 
+		</div>
+	{% endfor %}
+</div>
+
+</div>
+{% endblock %}

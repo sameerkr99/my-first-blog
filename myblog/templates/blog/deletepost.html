@@ -1,0 +1,17 @@
+{% extends 'blog/base.html' %}
+{% block content %}
+
+<div class="col-lg-8 col-lg-offset-2 allposts">
+<form action="{% url 'deletepost' %}" method="POST">
+	{% csrf_token %}
+	<ul>
+	{% for post in posts %}
+  		<li><input type="checkbox" name="checks" value={{post.id}}>{{post.title}}</li><br>
+  		<p>{{post.text}}</p>
+  	{% endfor %}
+  <button type="submit" class="btn btn-success btn-md">Delete</button>
+</form>	
+</div>
+
+
+{% endblock %}

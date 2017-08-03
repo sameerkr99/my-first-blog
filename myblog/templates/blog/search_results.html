@@ -1,0 +1,117 @@
+{% extends 'blog/base.html' %}
+{% block content %}
+{% if option == 1 %}
+	{% if users or posts %}
+		<div class="row"> 
+			<div class="col-lg-8 col-lg-offset-2">
+				Users : 
+				{% if not users %}
+				No User found !
+				{% endif %}
+			</div>
+		</div>
+		{% for user in users %}
+		<div class="row">
+			<div class="col-lg-8 col-lg-offset-2 allposts">
+				<table class="table">
+				<tr>
+					<td>User Name :</td>
+					<td>{{user}}</td>
+				</tr>
+				<tr>
+					<td>Name :</td>
+					<td>{{user.first_name}} {{user.last_name}}</td>
+				</tr>
+				<tr>
+					<td>Email :</td>
+					<td>{{user.email}}</td>
+				</tr>
+			</table>
+			</div>
+		</div>
+		{% endfor %}
+		<div class="row"> 
+			<div class="col-lg-8 col-lg-offset-2">
+				Posts : 
+				{% if not posts %}
+				No posts found !
+				{% endif %}
+			</div>
+		</div>
+		{% for post in posts %}
+		<div class="row">
+			<div class="col-lg-8 col-lg-offset-2 allposts">
+			<a href="{% url 'post_details' pk=post.pk %}"><h1>{{post.title}}</h1></a>
+			Author: {{post.author}}
+			<p>Published date :{{post.publish_date}}</p>
+			<p>{{post.text|linebreaksbr}}</p>
+			<p><a href="/home/comments/"><button class="btn btn-default mybutton">Like {{post.like}}</button></a> 
+			<a href=""><button class="btn btn-default mybutton">Comment</button></a></p>
+			
+			</div>
+		</div>
+		{% endfor %}
+	{% else %}
+		
+		<div class="row"> 
+			<div class="col-lg-8 col-lg-offset-2">
+				Results not found
+			</div>
+		</div>
+	{% endif %}
+{% elif option == 2 %}
+	<div class="row"> 
+			<div class="col-lg-8 col-lg-offset-2">
+				Posts : 
+				{% if not posts %}
+				No posts found !
+				{% endif %}
+			</div>
+		</div>
+		{% for post in posts %}
+		<div class="row">
+			<div class="col-lg-8 col-lg-offset-2 allposts">
+			<a href="{% url 'post_details' pk=post.pk %}"><h1>{{post.title}}</h1></a>
+			Author: {{post.author}}
+			<p>Published date :{{post.publish_date}}</p>
+			<p>{{post.text|linebreaksbr}}</p>
+			<p><a href="{url 'comment' pk=post.pk}"><button class="btn btn-default mybutton">Like {{post.like}}</button></a> 
+			<a href=""><button class="btn btn-default mybutton">Comment</button></a></p>
+			
+			</div>
+		</div>
+		{% endfor %}
+
+
+{% else %}
+<div class="row"> 
+			<div class="col-lg-8 col-lg-offset-2">
+				Users : 
+				{% if not users %}
+				No User found !
+				{% endif %}
+			</div>
+		</div>
+		{% for user in users %}
+		<div class="row">
+			<div class="col-lg-8 col-lg-offset-2 allposts">
+				<table class="table">
+				<tr>
+					<td>User Name :</td>
+					<td>{{user}}</td>
+				</tr>
+				<tr>
+					<td>Name :</td>
+					<td>{{user.first_name}} {{user.last_name}}</td>
+				</tr>
+				<tr>
+					<td>Email :</td>
+					<td>{{user.email}}</td>
+				</tr>
+			</table>
+			</div>
+		</div>
+		{% endfor %}
+
+{% endif %}
+{% endblock %}

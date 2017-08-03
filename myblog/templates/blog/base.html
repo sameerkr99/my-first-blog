@@ -1,0 +1,114 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>My Blog</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/myblog.css'%}">
+	<style type="text/css">
+		#username{
+			padding-top: 15px;
+			color: white;
+		}
+		form.login {
+  			border : 1px solid #000;
+  			padding : 5px;
+  			background: green;
+		}
+
+	</style>
+	<script type="text/javascript">
+		function showDiv() {
+  			 document.getElementById('mydiv').style.display = "block";
+		}
+	</script>
+</head>
+<body>
+{% if user.is_authenticated %}
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<nav class="navbar navbar-inverse" role="navigation">
+				<div class="navbar-header">
+					 
+					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+						 <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+					</button> <a class="navbar-brand" href="http://127.0.0.1:8008">Blog</a>
+				</div>
+				
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav">
+						<li class="active">
+							<a href="/home/">Home</a>
+						</li>
+					</ul>
+	<form class="navbar-form navbar-left" method = "POST" action = "{% url 'searchresult' %}">
+						{% csrf_token %}
+                        <div class="form-group">
+                            <input type="text" class="form-control" name = "searchtext" required />
+                        </div>
+                        <div class="form-group">
+						    <select class="form-control" name="search">
+						    	<option value="all" default>All</option>
+						    	<option value="title">Post</option>
+						    	<option value="user">User</option>
+						  	</select>
+                        </div>
+                        <button type="submit" class="btn btn-default">
+                            search
+                        </button>
+    </form>
+					<ul class="nav navbar-nav navbar-right">
+						<li class="nav navbar-nav">
+							<a href="/home/profile/">{{request.user}}</a>
+						</li>
+						<li class="dropdown">
+							 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Post<strong class="caret"></strong></a>
+							<ul class="dropdown-menu">
+								<li>
+									<a href="/home/myposts/">My Posts</a>
+								</li>
+								<li>
+									<a href="/home/post/">Add Post</a>
+								</li>
+								<li>
+									<a href="/home/deletepost/">Delete Post</a>
+								</li>
+								
+							</ul>
+						</li>
+						<li>
+							<a href="/logout/"><button class="btn btn-success btn-sm">Logout</button></a>
+						</li>
+					</ul>
+				</div>
+				
+			</nav>
+		</div>
+	</div>
+	
+				{% block content %}
+				{% endblock %}
+		
+	
+</div>
+{% else %}
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-6 col-lg-offset-3">
+					<img src="{% static 'Images/access-denied.png'%}" height="200px" width="400px">
+				</div>
+			</div><br>
+			<div class="row">
+				<div class="col-lg-6 col-lg-offset-3">
+					Restricted access to the page !! please login here <a href="/login/"><button class="btn btn-info btn-sm">Login</button></a> or go Back !
+				</div>
+			</div>
+		</div>
+{% endif %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+</body>
+</html>

@@ -1,0 +1,22 @@
+{% extends 'blog/base.html' %}
+{% block content %}
+
+<div class="col-lg-6 col-lg-offset-3 post">
+	<form method = "POST" action = "{% url 'post_new' %}" spellcheck="true">
+	{% csrf_token %}
+		
+		{% for field in form %}
+        {{ field.label_tag }}<br>
+        {{ field }}
+    	{% endfor %}
+    	<br>
+    	
+    		<div>
+			<center><button class="btn btn-success btn-sm" type = "submit">Add Post</button></center>
+		</div>
+    	
+    	
+	
+	</form>
+</div>
+{% endblock %}

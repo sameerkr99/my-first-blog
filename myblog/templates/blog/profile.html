@@ -1,0 +1,38 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+{% block content %}
+<div class="row">
+	<div class="col-md-3">
+		{% for prof in profile %}
+			<img src="{% static 'profilepic/dp.png' %}" height="100px">
+			<img src="">
+		{% endfor %}
+	</div>
+	<div class="col-md-6">
+		<table class="table">
+			<tr>
+				<td>User Name :</td>
+				<td>{{request.user}}</td>
+			</tr>
+			<tr>
+				<td>Name :</td>
+				<td>{{request.user.first_name}} {{request.user.last_name}}</td>
+			</tr>
+			<tr>
+				<td>Email :</td>
+				<td>{{request.user.email}}</td>
+			</tr>
+			{% for prof in profile%}
+			<tr>
+				<td>Phone :</td>
+				<td>{{prof.Phone}}</td>
+			</tr>
+			<tr>
+				<td>Date Of Birth :</td>
+				<td>{{prof.birth}}</td>
+			</tr>
+			{% endfor %}
+		</table>
+	</div>
+</div>
+{% endblock %}
