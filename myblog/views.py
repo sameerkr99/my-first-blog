@@ -1,5 +1,5 @@
 from django.shortcuts import render,get_object_or_404
-from .models import Post, Profile, comments
+from .models import Post, Profile, comments, Upvotes
 from django.contrib import auth
 from django.http import HttpResponseRedirect
 from .forms import loginForm, postForm, SignUpForm
@@ -59,6 +59,9 @@ def signup(request):
             username = form.cleaned_data.get('username')
             raw_password = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=raw_password)
+            myprofile = Profile()
+            myprofile.user = user
+            myprofile.save()
             login(request, user)
             return redirect('post_list')
     else:
@@ -114,3 +117,34 @@ def delete(request,pk):
 	post_pk = comment.post.pk
 	comment.delete()
 	return redirect('post_details',pk=post_pk)
+
+def profileupdate(request,pk):
+	profile = get_object_or_404(Profile,pk=pk)
+	user = profile.user
+	if request.method == 'POST':
+		profile.phone = request.POST['phone']
+		profile.birth = request.POST['birth']
+		user.first_name = request.POST['fname']
+		user.last_name = request.POST['lname']
+		user.email = request.POST['email']
+		user.save()
+		profile.save()
+		return redirect('profile_view')
+	return render(request, 'blog/updateprofile.html', {'profile':profile})
+
+def upvotes(request,pk):
+	upv_obj = Upvotes.objects.filter(post = pk)
+	post = get_object_or_404(Post,pk=pk)
+	if upv_obj:
+		post.like = post.like - 1
+		post.save()
+		upv_obj.delete()
+	else:
+		upv_obj = Upvotes()
+		post.like = post.like + 1
+		upv_obj.post = post
+		upv_obj.user = request.user
+		upv_obj.upvote = True
+		post.save()
+		upv_obj.save()
+	return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

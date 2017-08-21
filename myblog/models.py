@@ -22,7 +22,7 @@ class Categories(models.Model):
 class Profile(models.Model):
 	user = models.OneToOneField(User,on_delete=models.CASCADE, null = True)
 	dp = models.ImageField(default='C:/Projects/blogproject/myblog/static/profilepic/default/default_dp.png')
-	Phone = models.CharField(max_length = 10)
+	phone = models.CharField(max_length = 10)
 	birth = models.DateField(null = True, blank = True)
 	def __str__(self):
 		return str(self.user)
@@ -35,5 +35,12 @@ class comments(models.Model):
 	post = models.ForeignKey('myblog.Post')
 	author = models.CharField(default = "user", max_length = 20)
 	comment = models.CharField(max_length=100)
+	def __str__(self):
+		return str(self.post)
+
+class Upvotes(models.Model):
+	post = models.ForeignKey('myblog.Post')
+	user = models.ForeignKey('auth.User')
+	upvote = models.BooleanField(default = False)
 	def __str__(self):
 		return str(self.post)

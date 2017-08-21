@@ -22,7 +22,7 @@
 			
 			<tr>
 				<td>Phone :</td>
-				<td>{{profile.Phone}}</td>
+				<td>{{profile.phone}}</td>
 			</tr>
 			<tr>
 				<td>Date Of Birth :</td>
@@ -30,6 +30,9 @@
 			</tr>
 			
 		</table>
+	</div>
+	<div class="col-md-3">
+		<a href="{% url 'profileupdate' pk=profile.pk %}"><button class="btn btn-primary btn-sm">Update profile</button></a>
 	</div>
 </div>
 {% endblock %}

@@ -7,7 +7,7 @@
 	Author: {{post.author}}
 	<p>Published date :{{post.publish_date}}</p>
 	<p class="text-justify">{{post.text|linebreaksbr}}</p>
-	<p><a href="/home/comments/"><button class="btn btn-default mybutton">Like {{post.like}}</button></a> 
+	<p><a href="{% url 'upvote' pk=post.pk %}"><button class="btn btn-default mybutton">Upvotes {{post.like}}</button></a> 
 	</p>
 	{% block comment %}
 	{% endblock %}

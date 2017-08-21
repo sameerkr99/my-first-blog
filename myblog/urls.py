@@ -21,4 +21,7 @@ urlpatterns = [
     url(r'^post/(?P<pk>\d+)/comment/',views.comment,name = 'comment'),
     url(r'^post/(?P<pk>\d+)/edit/',views.edit,name = 'edit'),
     url(r'^post/(?P<pk>\d+)/delete/',views.delete,name = 'delete'),
+    url(r'home/profile/(?P<pk>\d+)/update/$', views.profileupdate, name = 'profileupdate'),
+    url(r'home/post/(?P<pk>\d+)/$', views.upvotes, name = 'upvote'),
+
 ]
