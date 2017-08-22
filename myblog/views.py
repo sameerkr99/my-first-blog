@@ -70,8 +70,15 @@ def signup(request):
 
 def profile_view(request):
 	profile = Profile.objects.get(user = request.user)
-	dp_name = re.search(r'/static/(.*)', str(profile.dp), re.M|re.I)
-	return render(request,'blog/profile.html',{'profile':profile,'dp_name':str(dp_name.group(1))})
+	posts = Post.objects.filter(author = request.user)
+	count = 0
+	for post in posts:
+		count += post.like
+	if 'default_dp.png' in str(profile.dp):
+		dp_name = "profilepic/default/default_dp.png"
+	else:
+		dp_name = "profilepic/"+str(request.user)+"/"+str(profile.dp)
+	return render(request,'blog/profile.html',{'profile':profile,'dp_name':str(dp_name),'num_posts':len(posts)})
 
 def searchresult(request):
 	option = 0
@@ -96,9 +103,14 @@ def post_details(request,pk):
 
 def comment(request,pk):
 	post = get_object_or_404(Post,pk=pk)
+	profile = Profile.objects.get(user = request.user)
 	if request.method == 'POST':
 		comment_obj = comments()
 		comment_obj.post = post
+		if 'default_dp.png' in str(profile.dp):
+			comment_obj.dp = "profilepic/default/default_dp.png"
+		else:
+			comment_obj.dp = "profilepic/"+str(request.user)+"/"+str(profile.dp)
 		comment_obj.author = request.POST['author']
 		comment_obj.comment = request.POST['mycomment']
 		comment_obj.save()
@@ -124,6 +136,7 @@ def profileupdate(request,pk):
 	if request.method == 'POST':
 		profile.phone = request.POST['phone']
 		profile.birth = request.POST['birth']
+		profile.dp = request.POST['mydp']
 		user.first_name = request.POST['fname']
 		user.last_name = request.POST['lname']
 		user.email = request.POST['email']

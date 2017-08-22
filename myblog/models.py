@@ -35,6 +35,7 @@ class comments(models.Model):
 	post = models.ForeignKey('myblog.Post')
 	author = models.CharField(default = "user", max_length = 20)
 	comment = models.CharField(max_length=100)
+	dp = models.CharField(max_length=1000, default = 'C:/Projects/blogproject/myblog/static/profilepic/default/default_dp.png')
 	def __str__(self):
 		return str(self.post)
 

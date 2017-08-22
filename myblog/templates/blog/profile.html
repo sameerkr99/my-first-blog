@@ -2,10 +2,13 @@
 {% load static %}
 {% block content %}
 <div class="row">
-	<div class="col-md-3">
+	<div class="col-md-4 col-md-offset-5">
 			<img src='/static/{{dp_name}}' class="img-circle" height="200px" width = "200px">
 	</div>
-	<div class="col-md-6">
+</div>
+<br>
+<div class="row">
+	<div class="col-md-6 col-md-offset-3">
 		<table class="table table-bordered">
 			<tr>
 				<td>User Name :</td>
@@ -28,7 +31,10 @@
 				<td>Date Of Birth :</td>
 				<td>{{profile.birth}}</td>
 			</tr>
-			
+			<tr>
+				<td>Number Of Posts Posted By You :</td>
+				<td>{{num_posts}}</td>
+			</tr>
 		</table>
 	</div>
 	<div class="col-md-3">

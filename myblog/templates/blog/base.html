@@ -19,6 +19,20 @@
 
 	</style>
 	<script type="text/javascript">
+		var count=1;
+		function setColor(x){
+		    var property = document.getElementById(x);
+		    if (count == 0){
+		        
+		        property.style.background='#000000';
+		        count=1;        
+		    }
+		    else{
+		        property.style.backgroundColor = "#7FFF00"
+		        count = 0;
+		    }
+
+		}
 		function showDiv(x) {
   			 document.getElementById(x).style.display = "block";
 		}
