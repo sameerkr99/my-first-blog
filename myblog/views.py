@@ -12,7 +12,7 @@ import re
 from django.contrib.auth.models import User
 def myposts(request):
 	post = Post.objects.filter(author = request.user).order_by('publish_date')
-	return render(request,'blog/posts.html', {'posts':post})
+	return render(request,'blog/posts.html', {'posts':post, 'num_posts':len(post)})
 def deletepost(request):
 	if request.method == 'POST':
 		ids = request.POST.getlist('checks')
@@ -22,9 +22,13 @@ def deletepost(request):
 	mypost = Post.objects.filter(author = request.user).order_by('publish_date')
 	return render(request,'blog/deletepost.html', {'posts':mypost})
 def post_list(request):
+	upvoted_post_list = []
 	post = Post.objects.order_by('publish_date')
 	comm = comments.objects.all()
-	return render(request,'blog/posts.html',{'posts':post, 'comments':comm})
+	user_upvotes = Upvotes.objects.filter(user=request.user)
+	for upvote in user_upvotes:
+		upvoted_post_list.append(upvote.post)
+	return render(request,'blog/posts.html',{'posts':post, 'comments':comm,'upvoted_post_list':upvoted_post_list})
 def post_new(request):
 	if request.method == "POST":
 		form = postForm(request.POST)
@@ -97,9 +101,17 @@ def searchresult(request):
 			return render(request,'blog/search_results.html',{'users':users,'option':option})
 
 def post_details(request,pk):
+	upvote_posts = []
+	upvote_users = []
 	post = get_object_or_404(Post,pk=pk)
 	comment = comments.objects.filter(post=post)
-	return render(request, 'blog/post_details.html',{'post':post, 'comments':comment})
+	user_upvotes = Upvotes.objects.filter(user=request.user)
+	upvote_list = Upvotes.objects.filter(post=post)
+	for upvote in upvote_list:
+		upvote_users.append(upvote.user)
+	for upvote in user_upvotes:
+		upvote_posts.append(upvote.post)
+	return render(request, 'blog/post_details.html',{'post':post, 'comments':comment,'upvote_posts':upvote_posts,'upvote_users':upvote_users,'num_users':len(upvote_users)})
 
 def comment(request,pk):
 	post = get_object_or_404(Post,pk=pk)
@@ -146,12 +158,14 @@ def profileupdate(request,pk):
 	return render(request, 'blog/updateprofile.html', {'profile':profile})
 
 def upvotes(request,pk):
-	upv_obj = Upvotes.objects.filter(post = pk)
+	upv_obj = Upvotes.objects.filter(post = pk,user = request.user)
 	post = get_object_or_404(Post,pk=pk)
 	if upv_obj:
-		post.like = post.like - 1
-		post.save()
-		upv_obj.delete()
+		for u_obj in upv_obj:
+			if u_obj.user == request.user:
+				post.like = post.like - 1
+				post.save()
+				upv_obj.delete()
 	else:
 		upv_obj = Upvotes()
 		post.like = post.like + 1

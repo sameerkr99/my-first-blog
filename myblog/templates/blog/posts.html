@@ -1,5 +1,14 @@
 {% extends 'blog/base.html' %}
 {% block content %}
+{% if num_posts == 0 %}
+
+
+<div class="row">
+	<div class="col-lg-2 col-lg-offset-2">
+		<p>No posts found !!</p>
+	</div>
+</div>
+{% endif %}
 {% for post in posts %}
 <div class="row">
 	<div class="col-lg-8 col-lg-offset-2 allposts">
@@ -7,10 +16,21 @@
 	Author: {{post.author}}
 	<p>Published date :{{post.publish_date}}</p>
 	<p class="text-justify">{{post.text|linebreaksbr}}</p>
-	<p><a href="{% url 'upvote' pk=post.pk %}"><button id = {{post.pk}} onclick="setColor({{post.pk}})" class="btn btn-default mybutton">Upvotes {{post.like}}</button></a> 
-	<a href="{% url 'post_details' pk=post.pk %}"><button class="btn btn-default mybutton">Comment</button></a></p>
-	{% block comment %}
-	{% endblock %}
+	<!--{% for upvote in upvotes %}
+		{% if upvote.post == post and upvote.upvote == True %}
+			<p><a href="{% url 'upvote' pk=post.pk %}"><button id = {{post.pk}} onclick="setColor({{post.pk}})" class="btn btn-success mybutton">Upvotes {{post.like}}</button></a>
+			
+		{% endif %}
+	{% endfor %} -->
+	{% if post in upvoted_post_list %}
+		<p><a href="{% url 'upvote' pk=post.pk %}"><button id = {{post.pk}} class="btn btn-primary mybutton"><img src="/static/Images/like.png" height="20px" width="40px"> {{post.like}}</button></a>
+
+
+	{% else %}
+		<p><a href="{% url 'upvote' pk=post.pk %}"><button id = {{post.pk}}  class="btn btn-default mybutton"><img src="/static/Images/like.png" height="20px" width="40px"> {{post.like}}</button></a>
+	{% endif %}
+	<a href="{% url 'post_details' pk=post.pk %}"><button class="btn btn-default">Comment</button></a></p>
+	
 	
 	</div>
 </div>
