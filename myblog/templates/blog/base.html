@@ -16,7 +16,7 @@
   			padding : 5px;
   			background: green;
 		}
-		
+
 
 	</style>
 	<script type="text/javascript">
@@ -62,7 +62,7 @@
     </form>
 					<ul class="nav navbar-nav navbar-right">
 						<li class="nav navbar-nav">
-							<a href="/home/profile/">{{request.user}}</a>
+							<a href="{% url 'profile_view' pk=request.user.pk %}">{{request.user}}</a>
 						</li>
 						<li class="dropdown">
 							 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Post<strong class="caret"></strong></a>

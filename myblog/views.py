@@ -72,9 +72,10 @@ def signup(request):
         form = SignUpForm()
     return render(request, 'blog/signup.html', {'form': form})
 
-def profile_view(request):
-	profile = Profile.objects.get(user = request.user)
-	posts = Post.objects.filter(author = request.user)
+def profile_view(request,pk):
+	user = get_object_or_404(User,pk=pk)
+	profile = get_object_or_404(Profile,user=user)
+	posts = Post.objects.filter(author = user)
 	count = 0
 	for post in posts:
 		count += post.like
@@ -82,7 +83,7 @@ def profile_view(request):
 		dp_name = "profilepic/default/default_dp.png"
 	else:
 		dp_name = "profilepic/"+str(request.user)+"/"+str(profile.dp)
-	return render(request,'blog/profile.html',{'profile':profile,'dp_name':str(dp_name),'num_posts':len(posts)})
+	return render(request,'blog/profile.html',{'profile':profile,'dp_name':str(dp_name),'num_posts':len(posts),'user':user})
 
 def searchresult(request):
 	option = 0
@@ -111,7 +112,7 @@ def post_details(request,pk):
 		upvote_users.append(upvote.user)
 	for upvote in user_upvotes:
 		upvote_posts.append(upvote.post)
-	return render(request, 'blog/post_details.html',{'post':post, 'comments':comment,'upvote_posts':upvote_posts,'upvote_users':upvote_users,'num_users':len(upvote_users)})
+	return render(request, 'blog/post_details.html',{'post':post, 'comments':comment,'upvote_posts':upvote_posts,'num_users':len(upvote_users)})
 
 def comment(request,pk):
 	post = get_object_or_404(Post,pk=pk)
@@ -119,27 +120,34 @@ def comment(request,pk):
 	if request.method == 'POST':
 		comment_obj = comments()
 		comment_obj.post = post
+		post.commentcount = post.commentcount + 1
 		if 'default_dp.png' in str(profile.dp):
 			comment_obj.dp = "profilepic/default/default_dp.png"
 		else:
 			comment_obj.dp = "profilepic/"+str(request.user)+"/"+str(profile.dp)
-		comment_obj.author = request.POST['author']
+		comment_obj.author = request.user
 		comment_obj.comment = request.POST['mycomment']
 		comment_obj.save()
+		post.save()
 		return redirect('post_details',pk=pk)
 
 def edit(request,pk):
 	comm = get_object_or_404(comments,pk=pk)
-	comm.comment = request.POST['comment']
-	comm.save()
+	if comm.author == request.user:
+		comm.comment = request.POST['comment']
+		comm.save()
 	p_pk = comm.post.pk
 	return redirect('post_details',pk=p_pk)
 
 
 def delete(request,pk):
 	comment = get_object_or_404(comments,pk=pk)
+	post = comment.post
 	post_pk = comment.post.pk
-	comment.delete()
+	if comment.author == request.user:
+		post.commentcount = post.commentcount - 1
+		post.save()
+		comment.delete()
 	return redirect('post_details',pk=post_pk)
 
 def profileupdate(request,pk):
@@ -175,3 +183,21 @@ def upvotes(request,pk):
 		post.save()
 		upv_obj.save()
 	return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+def upvoted_users(request,pk):
+	up_list = []
+	post = get_object_or_404(Post,pk=pk)
+	upvotes = Upvotes.objects.filter(post=post)
+	for upvote in upvotes:
+		up_list.append(get_object_or_404(Profile,user=upvote.user))
+	return render(request,'blog/upvoted_users.html',{'up_users':up_list})
+
+def editpost(request,pk):
+	post = get_object_or_404(Post,pk=pk)
+	if request.method == "POST":
+		
+		post.title = request.POST['title']
+		post.text = request.POST['content']
+		post.save()
+		return redirect('post_details',pk=pk)
+	return render(request,'blog/edit_post.html',{'post':post})

@@ -14,7 +14,7 @@ urlpatterns = [
     url(r'home/deletepost/$', views.deletepost, name = 'deletepost'),
     url(r'login/$', views.login_view, name = 'login_view'),
     url(r'signup/$', core_views.signup, name = 'signup'),
-    url(r'home/profile/$',views.profile_view, name = 'profile_view'),
+    url(r'home/profile/(?P<pk>\d+)/$',views.profile_view, name = 'profile_view'),
     url(r'home/search/$',views.searchresult,name = 'searchresult'),
     #url(r'home/comment/$', views.comments,name = 'comments' ),
     url(r'^post/(?P<pk>\d+)/$', views.post_details, name = 'post_details'),
@@ -23,5 +23,7 @@ urlpatterns = [
     url(r'^post/(?P<pk>\d+)/delete/',views.delete,name = 'delete'),
     url(r'home/profile/(?P<pk>\d+)/update/$', views.profileupdate, name = 'profileupdate'),
     url(r'home/post/(?P<pk>\d+)/$', views.upvotes, name = 'upvote'),
+    url(r'home/post/(?P<pk>\d+)/users/$',views.upvoted_users, name = 'upvoted_users'),
+    url(r'home/post/editpost/(?P<pk>\d+)/$',views.editpost,name= 'editpost'),
 
 ]

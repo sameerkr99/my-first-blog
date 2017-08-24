@@ -3,24 +3,21 @@
 {% block content %}
 <div class="row">
 	<div class="col-lg-8 col-lg-offset-2 allposts">
-	<a href="{% url 'post_details' pk=post.pk %}"><h1>{{post.title}}</h1></a>
-	Author: {{post.author}}
+
+	<div><a href="{% url 'post_details' pk=post.pk %}"><h2>{{post.title}}</h2></a></div>
+	<div style="float:right;"><a href="{% url 'editpost' pk=post.pk %}"><button class="btn btn-primary btn-sm">Edit Post</button></a></div>
+	<p>Author: {{post.author}}</p>
 	<p>Published date :{{post.publish_date}}</p>
 	<p class="text-justify">{{post.text|linebreaksbr}}</p>
 	<!--<p><a href="{% url 'upvote' pk=post.pk %}"><button class="btn btn-default mybutton"><img src="/static/Images/like.png" height="30px" width="35px"> {{post.like}}</button></a> 
 	</p> -->
+		<p class="bg-info"> <a href="{% url 'upvoted_users' pk=post.pk %}">{{post.like}} likes</a> , {{post.commentcount}} comments </p>
 		{% if post in upvote_posts %}
-			<p><a href="{% url 'upvote' pk=post.pk %}"><button id = {{post.pk}} class="btn btn-primary mybutton"><img src="/static/Images/like.png" height="20px" width="40px"> {{post.like}}</button></a>
+			<p><a href="{% url 'upvote' pk=post.pk %}"><button id = {{post.pk}} class="btn btn-primary mybutton"><img src="/static/Images/like.png" height="20px" width="30px"> </button></a>
 
 
 		{% else %}
-			<p><a href="{% url 'upvote' pk=post.pk %}"><button id = {{post.pk}}  class="btn btn-default mybutton"><img src="/static/Images/like.png" height="20px" width="40px"> {{post.like}}</button></a>
-		{% endif %}
-		{% if num_users > 0 %}
-			{% for user in upvote_users %}
-				{{user}},
-			{% endfor %}
-			like this !!
+			<p><a href="{% url 'upvote' pk=post.pk %}"><button id = {{post.pk}}  class="btn btn-default mybutton"><img src="/static/Images/like.png" height="20px" width="30px"> </button></a>
 		{% endif %}
 		
 	{% block comment %}
@@ -43,14 +40,16 @@
 			<div class="col-lg-1"><img src='/static/{{comment.dp}}' class="img-thumbnail">
 			</div>
 			<div class="col-lg-8">
-				<p style="color: blue;font-size: 15px;"><a href=""><b>{{comment.author}}</b></a>
+				<p style="color: blue;font-size: 15px;"><a href="{% url 'profile_view' pk=comment.author.pk %}"><b>{{comment.author}}</b></a>
 
 				</p>
 				<p class="text-justify">{{comment.comment}}</p>
 			</div>
 			<div class="col-lg-3">
+				{% if comment.author == request.user %}
 				<p><button onclick="showDiv({{comment.pk}})" class="btn btn-sm">edit</button>
 					<a href="{% url 'delete' pk=comment.pk %}"><button class="btn btn-sm">delete</button></a></p>
+				{% endif %}
 			</div>
 			<div id="{{comment.pk}}" style="display:none;">
 				<form method="POST" action = "{% url 'edit' pk=comment.pk %}">

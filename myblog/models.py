@@ -5,11 +5,12 @@ from blogproject import settings
 # Create your models here.
 class Post(models.Model):
 	author = models.ForeignKey('auth.User')
-	title = models.CharField(max_length = 50)
+	title = models.CharField(max_length = 100)
 	text = models.TextField()
 	create_date = models.DateTimeField(default = timezone.now)
 	publish_date = models.DateTimeField(blank = True,null = True)
 	like = models.IntegerField(default = 0)
+	commentcount = models.IntegerField(default=0)
 	def __str__(self):
 		return self.title
 
@@ -33,7 +34,7 @@ class Profile(models.Model):
 		super(Profile, self).save()
 class comments(models.Model):
 	post = models.ForeignKey('myblog.Post')
-	author = models.CharField(default = "user", max_length = 20)
+	author = models.ForeignKey('auth.User')
 	comment = models.CharField(max_length=100)
 	dp = models.CharField(max_length=1000, default = 'C:/Projects/blogproject/myblog/static/profilepic/default/default_dp.png')
 	def __str__(self):

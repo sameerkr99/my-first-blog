@@ -1,0 +1,13 @@
+{% extends 'blog/base.html' %}
+{% block content %}
+{% for profile in up_users %}
+<div class="row">
+	<div class="col-lg-8 col-lg-offset-2 allposts">
+	
+	<img src='/static/{{profile.dp}}' class="img-circle" height="50px" width = "50px">
+	<a href="{% url 'profile_view' pk=profile.user.pk %}">{{profile.user.first_name}} {{profile.user.last_name}}</a>
+	</div>
+</div>
+
+{% endfor %}
+{% endblock %}
