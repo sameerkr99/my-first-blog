@@ -22,7 +22,7 @@ class Categories(models.Model):
 
 class Profile(models.Model):
 	user = models.OneToOneField(User,on_delete=models.CASCADE, null = True)
-	dp = models.ImageField(default='C:/Projects/blogproject/myblog/static/profilepic/default/default_dp.png')
+	dp = models.FileField(default = 'profilepic/default/default_dp.png')
 	phone = models.CharField(max_length = 10)
 	birth = models.DateField(null = True, blank = True)
 	def __str__(self):
@@ -30,13 +30,13 @@ class Profile(models.Model):
 	def save(self):
 		for field in self._meta.fields:
 			if field.name == 'dp':
-				field.upload_to= settings.STATIC_ROOT+"/profilepic/%s" % self.user
+				field.upload_to= settings.MEDIA_ROOT+"/profilepic/%s" % self.user
 		super(Profile, self).save()
 class comments(models.Model):
 	post = models.ForeignKey('myblog.Post')
 	author = models.ForeignKey('auth.User')
 	comment = models.CharField(max_length=100)
-	dp = models.CharField(max_length=1000, default = 'C:/Projects/blogproject/myblog/static/profilepic/default/default_dp.png')
+	dp = models.FileField(blank=True)
 	def __str__(self):
 		return str(self.post)
 

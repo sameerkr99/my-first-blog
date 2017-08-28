@@ -2,7 +2,7 @@ from django.shortcuts import render,get_object_or_404
 from .models import Post, Profile, comments, Upvotes
 from django.contrib import auth
 from django.http import HttpResponseRedirect
-from .forms import loginForm, postForm, SignUpForm
+from .forms import loginForm, postForm, SignUpForm, DpForm
 from django.utils import timezone
 from django.shortcuts import redirect
 from django.contrib.auth import authenticate, login
@@ -121,10 +121,7 @@ def comment(request,pk):
 		comment_obj = comments()
 		comment_obj.post = post
 		post.commentcount = post.commentcount + 1
-		if 'default_dp.png' in str(profile.dp):
-			comment_obj.dp = "profilepic/default/default_dp.png"
-		else:
-			comment_obj.dp = "profilepic/"+str(request.user)+"/"+str(profile.dp)
+		comment_obj.dp = profile.dp
 		comment_obj.author = request.user
 		comment_obj.comment = request.POST['mycomment']
 		comment_obj.save()
@@ -156,13 +153,12 @@ def profileupdate(request,pk):
 	if request.method == 'POST':
 		profile.phone = request.POST['phone']
 		profile.birth = request.POST['birth']
-		profile.dp = request.POST['mydp']
 		user.first_name = request.POST['fname']
 		user.last_name = request.POST['lname']
 		user.email = request.POST['email']
 		user.save()
 		profile.save()
-		return redirect('profile_view')
+		return redirect('profile_view',pk=request.user.pk)
 	return render(request, 'blog/updateprofile.html', {'profile':profile})
 
 def upvotes(request,pk):
@@ -195,9 +191,16 @@ def upvoted_users(request,pk):
 def editpost(request,pk):
 	post = get_object_or_404(Post,pk=pk)
 	if request.method == "POST":
-		
 		post.title = request.POST['title']
 		post.text = request.POST['content']
 		post.save()
 		return redirect('post_details',pk=pk)
 	return render(request,'blog/edit_post.html',{'post':post})
+
+def updateDp(request):
+	profile = get_object_or_404(Profile,user=request.user)
+	if request.method == 'POST':
+		profile.dp = request.FILES.get('mydp')
+		profile.save()
+		return redirect('profile_view',pk=request.user.pk)
+	return render(request,'blog/updateDp.html',{'profile':profile})

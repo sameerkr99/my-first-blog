@@ -4,6 +4,7 @@ from . import views as core_views
 from . import views
 from django.conf import settings
 from django.conf.urls.static import static
+
 urlpatterns = [
     url(r'home/$', views.post_list, name = 'post_list'),
     #url(r'login/$', auth_views.login, {'template_name': 'blog/login.html'}, name='login'),
@@ -25,5 +26,6 @@ urlpatterns = [
     url(r'home/post/(?P<pk>\d+)/$', views.upvotes, name = 'upvote'),
     url(r'home/post/(?P<pk>\d+)/users/$',views.upvoted_users, name = 'upvoted_users'),
     url(r'home/post/editpost/(?P<pk>\d+)/$',views.editpost,name= 'editpost'),
+    url(r'home/profile/updatedp/$',views.updateDp, name = 'updateDp'),
 
-]
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

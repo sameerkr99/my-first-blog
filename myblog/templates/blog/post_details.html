@@ -5,7 +5,9 @@
 	<div class="col-lg-8 col-lg-offset-2 allposts">
 
 	<div><a href="{% url 'post_details' pk=post.pk %}"><h2>{{post.title}}</h2></a></div>
+	{% if post.author == request.user %}
 	<div style="float:right;"><a href="{% url 'editpost' pk=post.pk %}"><button class="btn btn-primary btn-sm">Edit Post</button></a></div>
+	{% endif %}
 	<p>Author: {{post.author}}</p>
 	<p>Published date :{{post.publish_date}}</p>
 	<p class="text-justify">{{post.text|linebreaksbr}}</p>
@@ -20,8 +22,7 @@
 			<p><a href="{% url 'upvote' pk=post.pk %}"><button id = {{post.pk}}  class="btn btn-default mybutton"><img src="/static/Images/like.png" height="20px" width="30px"> </button></a>
 		{% endif %}
 		
-	{% block comment %}
-	{% endblock %}
+	
 	<form method = 'POST' action = "{% url 'comment' pk=post.pk %}">
 		{% csrf_token %}
 		<div class="form-group col-lg-10">
@@ -37,7 +38,7 @@
 
 	{% for comment in comments %}
 		<div class="col-lg-12 comment">
-			<div class="col-lg-1"><img src='/static/{{comment.dp}}' class="img-thumbnail">
+			<div class="col-lg-1"><img src='{{comment.dp.url}}' class="img-thumbnail">
 			</div>
 			<div class="col-lg-8">
 				<p style="color: blue;font-size: 15px;"><a href="{% url 'profile_view' pk=comment.author.pk %}"><b>{{comment.author}}</b></a>

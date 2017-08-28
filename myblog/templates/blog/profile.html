@@ -2,13 +2,14 @@
 {% load static %}
 {% block content %}
 <div class="row">
-	<div class="col-md-4 col-md-offset-5">
-			<img src='/static/{{dp_name}}' class="img-circle" height="200px" width = "200px">
+	<div class="col-md-2">
+			<img src='{{profile.dp.url}}' class="img-circle" height="200px" width = "200px">
+			{% if user.pk == request.user.pk %}
+			<a href="{% url 'updateDp' %}">Update</a>
+			{% endif %}
+			
 	</div>
-</div>
-<br>
-<div class="row">
-	<div class="col-md-6 col-md-offset-3">
+	<div class="col-md-6 col-sm-offset-1">
 		<table class="table table-bordered">
 			<tr>
 				<td>User Name :</td>
@@ -37,8 +38,10 @@
 			</tr>
 		</table>
 	</div>
+	{% if user.pk == request.user.pk %}
 	<div class="col-md-3">
 		<a href="{% url 'profileupdate' pk=profile.pk %}"><button class="btn btn-primary btn-sm">Update profile</button></a>
 	</div>
+	{% endif %}
 </div>
 {% endblock %}
