@@ -10,7 +10,9 @@ class Post(models.Model):
 	create_date = models.DateTimeField(default = timezone.now)
 	publish_date = models.DateTimeField(blank = True,null = True)
 	like = models.IntegerField(default = 0)
+	image = models.FileField(null=True, upload_to=settings.MEDIA_ROOT+'/postsimages/')
 	commentcount = models.IntegerField(default=0)
+	category = models.ForeignKey('myblog.Categories')
 	def __str__(self):
 		return self.title
 
@@ -34,9 +36,8 @@ class Profile(models.Model):
 		super(Profile, self).save()
 class comments(models.Model):
 	post = models.ForeignKey('myblog.Post')
-	author = models.ForeignKey('auth.User')
+	authorprofile = models.ForeignKey('myblog.Profile')
 	comment = models.CharField(max_length=100)
-	dp = models.FileField(blank=True)
 	def __str__(self):
 		return str(self.post)
 

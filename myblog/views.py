@@ -1,15 +1,16 @@
 from django.shortcuts import render,get_object_or_404
-from .models import Post, Profile, comments, Upvotes
+from .models import Post, Profile, comments, Upvotes,Categories
 from django.contrib import auth
+from django.conf import settings
+from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
 from .forms import loginForm, postForm, SignUpForm, DpForm
 from django.utils import timezone
 from django.shortcuts import redirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import UserCreationForm
-import os
-import re
 from django.contrib.auth.models import User
+import datetime
 def myposts(request):
 	post = Post.objects.filter(author = request.user).order_by('publish_date')
 	return render(request,'blog/posts.html', {'posts':post, 'num_posts':len(post)})
@@ -30,17 +31,19 @@ def post_list(request):
 		upvoted_post_list.append(upvote.post)
 	return render(request,'blog/posts.html',{'posts':post, 'comments':comm,'upvoted_post_list':upvoted_post_list})
 def post_new(request):
+	categories = Categories.objects.all()
 	if request.method == "POST":
-		form = postForm(request.POST)
+		form = postForm(request.POST,request.FILES)
 		if form.is_valid():
 			post = form.save(commit=False)
 			post.author = request.user
+			post.image = request.FILES.get('image')
 			post.publish_date = timezone.now()
 			post.save()
 			return redirect('post_list')
 	else:
 	    form = postForm()
-	return render(request, 'blog/newpost.html', {'form': form})
+	return render(request, 'blog/newpost.html', {'form': form,'categories':categories})
 def welcome(request):
 	return render(request,'blog/welcome.html')
 def login_view(request):
@@ -62,6 +65,13 @@ def signup(request):
             form.save()
             username = form.cleaned_data.get('username')
             raw_password = form.cleaned_data.get('password1')
+            email = form.cleaned_data.get('email')
+
+            subject = 'Thank you for sign up'
+            message = 'Hi, \nThanks for sign up for myblog. Kindly login to myblog.\nRegards,\nSameer Kumar'
+            from_email = settings.EMAIL_HOST_USER
+            to_list = [email,settings.EMAIL_HOST_USER]
+            send_mail(subject,message,from_email, to_list,fail_silently=True)
             user = authenticate(username=username, password=raw_password)
             myprofile = Profile()
             myprofile.user = user
@@ -79,27 +89,27 @@ def profile_view(request,pk):
 	count = 0
 	for post in posts:
 		count += post.like
-	if 'default_dp.png' in str(profile.dp):
-		dp_name = "profilepic/default/default_dp.png"
-	else:
-		dp_name = "profilepic/"+str(request.user)+"/"+str(profile.dp)
-	return render(request,'blog/profile.html',{'profile':profile,'dp_name':str(dp_name),'num_posts':len(posts),'user':user})
+	return render(request,'blog/profile.html',{'profile':profile,'num_posts':len(posts),'user':user})
 
 def searchresult(request):
 	option = 0
+	profile_list = []
 	if request.method == 'POST':
 		search = request.POST['searchtext']
 		posts = Post.objects.filter(title__icontains = search).order_by('publish_date')
 		users = User.objects.filter(first_name__icontains = search)
+		if users:
+			for user in users:
+				profile_list.append(Profile.objects.get(user=user))
 		if request.POST['search'] == 'all':
 			option = 1
-			return render(request,'blog/search_results.html',{'users':users,'posts':posts,'option':option})
+			return render(request,'blog/search_results.html',{'profile_list':profile_list,'posts':posts,'option':option})
 		elif request.POST['search'] == 'title':
 			option = 2
 			return render(request,'blog/search_results.html',{'posts':posts,'option':option})
 		else :
 			option = 3
-			return render(request,'blog/search_results.html',{'users':users,'option':option})
+			return render(request,'blog/search_results.html',{'profile_list':profile_list,'option':option})
 
 def post_details(request,pk):
 	upvote_posts = []
@@ -121,8 +131,7 @@ def comment(request,pk):
 		comment_obj = comments()
 		comment_obj.post = post
 		post.commentcount = post.commentcount + 1
-		comment_obj.dp = profile.dp
-		comment_obj.author = request.user
+		comment_obj.authorprofile = profile
 		comment_obj.comment = request.POST['mycomment']
 		comment_obj.save()
 		post.save()
@@ -149,6 +158,7 @@ def delete(request,pk):
 
 def profileupdate(request,pk):
 	profile = get_object_or_404(Profile,pk=pk)
+	birthday = profile.birth
 	user = profile.user
 	if request.method == 'POST':
 		profile.phone = request.POST['phone']
@@ -159,7 +169,7 @@ def profileupdate(request,pk):
 		user.save()
 		profile.save()
 		return redirect('profile_view',pk=request.user.pk)
-	return render(request, 'blog/updateprofile.html', {'profile':profile})
+	return render(request, 'blog/updateprofile.html', {'profile':profile},{'birthday':birthday})
 
 def upvotes(request,pk):
 	upv_obj = Upvotes.objects.filter(post = pk,user = request.user)
@@ -190,12 +200,16 @@ def upvoted_users(request,pk):
 
 def editpost(request,pk):
 	post = get_object_or_404(Post,pk=pk)
+	categories = Categories.objects.all().order_by('title')
 	if request.method == "POST":
 		post.title = request.POST['title']
 		post.text = request.POST['content']
+		post.category = get_object_or_404(Categories,title=request.POST['category']) 
+		if request.FILES.get('image'):
+			post.image = request.FILES.get('image')
 		post.save()
 		return redirect('post_details',pk=pk)
-	return render(request,'blog/edit_post.html',{'post':post})
+	return render(request,'blog/edit_post.html',{'post':post,'categories':categories})
 
 def updateDp(request):
 	profile = get_object_or_404(Profile,user=request.user)

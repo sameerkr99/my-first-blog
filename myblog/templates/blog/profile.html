@@ -2,14 +2,15 @@
 {% load static %}
 {% block content %}
 <div class="row">
-	<div class="col-md-2">
+	<div class="col-md-4 col-md-offset-5">
 			<img src='{{profile.dp.url}}' class="img-circle" height="200px" width = "200px">
 			{% if user.pk == request.user.pk %}
 			<a href="{% url 'updateDp' %}">Update</a>
 			{% endif %}
-			
 	</div>
-	<div class="col-md-6 col-sm-offset-1">
+</div><br>
+<div class="row">
+	<div class="col-md-6 col-md-offset-3 allposts">
 		<table class="table table-bordered">
 			<tr>
 				<td>User Name :</td>

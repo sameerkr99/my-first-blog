@@ -1,5 +1,4 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -51,7 +50,7 @@
 	<form class="navbar-form navbar-left" method = "POST" action = "{% url 'searchresult' %}">
 						{% csrf_token %}
                         <div class="form-group">
-                            <input type="text" class="form-control" name = "searchtext" required />
+                            <input type="text" class="form-control" name = "searchtext" placeholder="search post or user" required />
                         </div>
                         <div class="form-group">
 						    <select class="form-control" name="search">

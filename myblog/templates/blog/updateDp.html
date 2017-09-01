@@ -6,7 +6,7 @@
 		<div class="col-lg-4 col-lg-offset-3">
 			<form method="POST" action="{% url 'updateDp' %}" enctype="multipart/form-data" runat="server">
 				{% csrf_token %}
-			<input type="file" name="mydp" onchange="loadFile(event)"/><br>
+			<input type="file" name="mydp" onchange="loadFile(event)" required /><br>
 			<img id="output" height="200px" width="200px" alt=" "/><br>
 			<button class="btn btn-primary btn-md" type="submit">Update</button>
 </form>

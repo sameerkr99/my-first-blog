@@ -5,11 +5,17 @@
 	<div class="col-lg-8 col-lg-offset-2 allposts">
 
 	<div><a href="{% url 'post_details' pk=post.pk %}"><h2>{{post.title}}</h2></a></div>
+	
+	{% if post.image %}
+	<img src="{{post.image.url}}" height="300px" width="750px">
+	{% endif %}
+	<br><br>
 	{% if post.author == request.user %}
 	<div style="float:right;"><a href="{% url 'editpost' pk=post.pk %}"><button class="btn btn-primary btn-sm">Edit Post</button></a></div>
 	{% endif %}
-	<p>Author: {{post.author}}</p>
-	<p>Published date :{{post.publish_date}}</p>
+	<p>Author : {{post.author}}</p>
+	<p>Category : {{post.category}}</p>
+	<p>Published date : {{post.publish_date}}</p>
 	<p class="text-justify">{{post.text|linebreaksbr}}</p>
 	<!--<p><a href="{% url 'upvote' pk=post.pk %}"><button class="btn btn-default mybutton"><img src="/static/Images/like.png" height="30px" width="35px"> {{post.like}}</button></a> 
 	</p> -->
@@ -38,16 +44,16 @@
 
 	{% for comment in comments %}
 		<div class="col-lg-12 comment">
-			<div class="col-lg-1"><img src='{{comment.dp.url}}' class="img-thumbnail">
+			<div class="col-lg-1"><img src='{{comment.authorprofile.dp.url}}' class="img-thumbnail">
 			</div>
 			<div class="col-lg-8">
-				<p style="color: blue;font-size: 15px;"><a href="{% url 'profile_view' pk=comment.author.pk %}"><b>{{comment.author}}</b></a>
+				<p style="color: blue;font-size: 15px;"><a href="{% url 'profile_view' pk=comment.authorprofile.user.pk %}"><b>{{comment.authorprofile.user}}</b></a>
 
 				</p>
 				<p class="text-justify">{{comment.comment}}</p>
 			</div>
 			<div class="col-lg-3">
-				{% if comment.author == request.user %}
+				{% if comment.authorprofile.user == request.user %}
 				<p><button onclick="showDiv({{comment.pk}})" class="btn btn-sm">edit</button>
 					<a href="{% url 'delete' pk=comment.pk %}"><button class="btn btn-sm">delete</button></a></p>
 				{% endif %}

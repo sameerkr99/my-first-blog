@@ -10,11 +10,12 @@ class loginForm(forms.Form):
 class postForm(forms.ModelForm):
 	class Meta:
 		model = Post
-		fields = ('title', 'text',)
+		fields = ('title', 'text','image','category',)
 	def __init__(self, *args, **kwargs):
 		super(postForm, self).__init__(*args, **kwargs)
 		self.fields['title'].required = True
 		self.fields['text'].required = True
+		self.fields['image'].required = False
 		for field in iter(self.fields):
 			self.fields[field].widget.attrs.update({'class': 'form-control'})
 
@@ -33,3 +34,5 @@ class SignUpForm(UserCreationForm):
 
 class DpForm(forms.Form):
 	file = forms.FileField()
+
+

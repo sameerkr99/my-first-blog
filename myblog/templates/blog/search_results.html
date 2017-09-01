@@ -1,30 +1,30 @@
 {% extends 'blog/base.html' %}
 {% block content %}
 {% if option == 1 %}
-	{% if users or posts %}
+	{% if profile_list or posts %}
 		<div class="row"> 
 			<div class="col-lg-8 col-lg-offset-2">
 				Users : 
-				{% if not users %}
+				{% if not profile_list %}
 				No User found !
 				{% endif %}
 			</div>
 		</div>
-		{% for user in users %}
+		{% for profile in profile_list %}
 		<div class="row">
 			<div class="col-lg-8 col-lg-offset-2 allposts">
 				<table class="table">
 				<tr>
 					<td>User Name :</td>
-					<td>{{user}}</td>
+					<td><a href="{% url 'profile_view' pk=profile.user.pk %}">{{profile.user}}</a></td>
 				</tr>
 				<tr>
 					<td>Name :</td>
-					<td>{{user.first_name}} {{user.last_name}}</td>
+					<td>{{profile.user.first_name}} {{profile.user.last_name}}</td>
 				</tr>
 				<tr>
 					<td>Email :</td>
-					<td>{{user.email}}</td>
+					<td>{{profile.user.email}}</td>
 				</tr>
 			</table>
 			</div>
@@ -75,7 +75,8 @@
 			Author: {{post.author}}
 			<p>Published date :{{post.publish_date}}</p>
 			<p>{{post.text|linebreaksbr}}</p>
-			
+			<p><a href="/home/comments/"><button class="btn btn-default mybutton"><img src="/static/Images/like.png" height="20px" width="30px"> {{post.like}}</button></a> 
+			<a href=""><button class="btn btn-default mybutton">Comment</button></a></p>
 			
 			</div>
 		</div>
@@ -86,26 +87,26 @@
 <div class="row"> 
 			<div class="col-lg-8 col-lg-offset-2">
 				Users : 
-				{% if not users %}
-				No User found !
+				{% if not profile_list %}
+					No User found !
 				{% endif %}
 			</div>
 		</div>
-		{% for user in users %}
+		{% for profile in profile_list %}
 		<div class="row">
 			<div class="col-lg-8 col-lg-offset-2 allposts">
 				<table class="table">
 				<tr>
 					<td>User Name :</td>
-					<td>{{user}}</td>
+					<td><a href="{% url 'profile_view' pk=profile.user.pk %}">{{profile.user}}</a></td>
 				</tr>
 				<tr>
 					<td>Name :</td>
-					<td>{{user.first_name}} {{user.last_name}}</td>
+					<td>{{profile.user.first_name}} {{profile.user.last_name}}</td>
 				</tr>
 				<tr>
 					<td>Email :</td>
-					<td>{{user.email}}</td>
+					<td>{{profile.user.email}}</td>
 				</tr>
 			</table>
 			</div>

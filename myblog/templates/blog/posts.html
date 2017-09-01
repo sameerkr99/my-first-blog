@@ -13,8 +13,12 @@
 <div class="row">
 	<div class="col-lg-8 col-lg-offset-2 allposts">
 	<a href="{% url 'post_details' pk=post.pk %}"><h1>{{post.title}}</h1></a>
-	Author: {{post.author}}
-	<p>Published date :{{post.publish_date}}</p>
+	{% if post.image %}
+	<img class="img-rounded" src="{{post.image.url}}" height="300px" width="750px">
+	{% endif %}
+	<p>Author : {{post.author}}</p>
+	<p>Category : {{post.category}}</p>
+	<p>Published date : {{post.publish_date}}</p>
 	<p class="text-justify">{{post.text|linebreaksbr}}</p>
 	<p class="bg-info">{{post.like}} likes, {{post.commentcount}} comments</p>
 	<!--{% for upvote in upvotes %}
