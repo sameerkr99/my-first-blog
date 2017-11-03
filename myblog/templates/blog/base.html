@@ -5,6 +5,7 @@
 	<title>My Blog</title>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 	<link rel="stylesheet" type="text/css" href="{% static 'css/myblog.css'%}">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 	<style type="text/css">
 		#username{
 			padding-top: 15px;
@@ -18,14 +19,34 @@
 
 
 	</style>
-	<script type="text/javascript">
-		function showDiv(x) {
-  			 document.getElementById(x).style.display = "block";
+	<script>
+		$(document).ready(function(){
+				weather();
+		});
+		function weather(){
+			$.getJSON("https://api.weatherbit.io/v2.0/current?postal_code=560029&country=IN&key=9c54529968c94bf29156840f7d50c72a",function(result){
+    			$.each(result,function(key,val){
+    				$.each(val,function(k,v){
+    					$.each(v,function(kr,vr){
+    						if(kr=="temp"){
+    							$("#2").html(vr+"'Celcius");
+    						}else if(kr=="app_temp"){
+    							$("#3").html(vr+"'Celcius");
+    						}else if(kr=="clouds"){
+    							$("#4").html(vr+"%");
+    						}else if(kr=="wind_spd"){
+    							$("#5").html(vr+"m/s");
+    						}else if(kr=="city_name"){
+    							$("#1").html(vr);
+    						}
+    						
+    					});
+    				});
+
+    			});
+    		
+    		});
 		}
-		var loadFile = function(event) {
-   		var output = document.getElementById('output');
-    	output.src = URL.createObjectURL(event.target.files[0]);
-  		};
 	</script>
 </head>
 <body>
@@ -47,22 +68,23 @@
 							<a href="/home/">Home</a>
 						</li>
 					</ul>
-	<form class="navbar-form navbar-left" method = "POST" action = "{% url 'searchresult' %}">
-						{% csrf_token %}
-                        <div class="form-group">
-                            <input type="text" class="form-control" name = "searchtext" placeholder="search post or user" required />
-                        </div>
-                        <div class="form-group">
-						    <select class="form-control" name="search">
-						    	<option value="all" default>All</option>
-						    	<option value="title">Post</option>
-						    	<option value="user">User</option>
-						  	</select>
-                        </div>
-                        <button type="submit" class="btn btn-default">
-                            search
-                        </button>
-    </form>
+				<form class="navbar-form navbar-left" method = "POST" action = "{% url 'searchresult' %}">
+									{% csrf_token %}
+			                        <div class="form-group">
+			                            <input type="text" class="form-control" name = "searchtext" placeholder="search post or user" required />
+			                        </div>
+			                        <div class="form-group">
+									    <select class="form-control" name="search">
+									    	<option value="all" default>All</option>
+									    	<option value="title">Post</option>
+									    	<option value="user">User</option>
+									  	</select>
+			                        </div>
+			                        <button type="submit" class="btn btn-default">
+			                            search
+			                        </button>
+			    </form>
+    
 					<ul class="nav navbar-nav navbar-right">
 						<li class="nav navbar-nav">
 							<a href="{% url 'profile_view' pk=request.user.pk %}">{{request.user}}</a>
@@ -91,9 +113,43 @@
 			</nav>
 		</div>
 	</div>
-	
-				{% block content %}
+	<div class="row">
+		<div class="col-lg-7 col-lg-offset-2">
+			<script src="{% static 'jquery/custom.js'%}"></script>
+			{% block content %}
+
 				{% endblock %}
+		</div>
+		<div class="col-lg-3 weather">
+			<span style="margin:100px;border-radius: 5px;background: #55E8D7;padding: 5px;">Weather</span><img src="http://downloadicons.net/sites/default/files/refresh-button-icon-76693.png" height="25px" width="25px" id="">
+			<p id="reload" onclick="weather()">click</p>
+			<table class="table table-bordered">
+				<tr>
+					<td>City</td>
+					<td id="1"></td>
+				</tr>
+				<tr>
+					<td>Current temprature</td>
+					<td id="2"></td>
+					
+				</tr>
+				<tr>
+					<td>Feels Like</td>
+					<td id="3"></td>
+				</tr>
+				<tr>
+					<td>Clouds</td>
+					<td id="4"></td>
+				</tr>
+				<tr>
+					<td>Wind speed</td>
+					<td id="5"></td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	
+				
 		
 	
 </div>

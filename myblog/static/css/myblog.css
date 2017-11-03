@@ -53,3 +53,10 @@ div.comment{
     margin-bottom: 5px;
 }
 input[type="text"]{ padding: 20px 10px; line-height: 28px; }
+
+div.weather{
+    background: #B6A4E3;
+    padding: 10px;
+    border: 2px solid black;
+    border-radius: 5px;
+}

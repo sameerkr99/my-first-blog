@@ -1,4 +1,4 @@
-from django.conf.urls import url
+from django.conf.urls import url,include
 from django.contrib.auth import views as auth_views
 from . import views as core_views
 from . import views
@@ -27,5 +27,11 @@ urlpatterns = [
     url(r'home/post/(?P<pk>\d+)/users/$',views.upvoted_users, name = 'upvoted_users'),
     url(r'home/post/editpost/(?P<pk>\d+)/$',views.editpost,name= 'editpost'),
     url(r'home/profile/updatedp/$',views.updateDp, name = 'updateDp'),
+    url(r'^weather/$',views.weather, name='weather'),
+    url(r'home/(?P<pk>\d+)/$',views.filter,name='filter'),
+    url('^', include('django.contrib.auth.urls')),
+    url(r'createpost/$',views.createPost.as_view(), name = 'createpost'),
+    url(r'removepost/(?P<pk>\d+)/$',views.removePost.as_view()),
+
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,41 +1,51 @@
 {% extends 'blog/base.html' %}
 {% block content %}
+
+
+		<div class="col-lg-1 col-lg-offset-9">
+			<div class="dropdown">
+		 		<a href="#" class="dropdown-toggle" data-toggle="dropdown"><button class="btn btn-success btn-sm">Filter</button><strong class="caret"></strong></a>
+				<ul class="dropdown-menu">
+					{% for category in categories %}
+					<li>
+						<a href="{% url 'filter' pk=category.pk %}">{{category.title}}</a>
+					</li>
+					{% endfor %}
+				</ul>
+			</div>
+		</div>
+		<br>
+
 {% if num_posts == 0 %}
 
-
-<div class="row">
-	<div class="col-lg-2 col-lg-offset-2">
 		<p>No posts found !!</p>
-	</div>
-</div>
+	
 {% endif %}
 {% for post in posts %}
-<div class="row">
-	<div class="col-lg-8 col-lg-offset-2 allposts">
-	<a href="{% url 'post_details' pk=post.pk %}"><h1>{{post.title}}</h1></a>
-	{% if post.image %}
-	<img class="img-rounded" src="{{post.image.url}}" height="300px" width="750px">
-	{% endif %}
-	<p>Author : {{post.author}}</p>
-	<p>Category : {{post.category}}</p>
-	<p>Published date : {{post.publish_date}}</p>
-	<p class="text-justify">{{post.text|linebreaksbr}}</p>
-	<p class="bg-info">{{post.like}} likes, {{post.commentcount}} comments</p>
-	<!--{% for upvote in upvotes %}
-		{% if upvote.post == post and upvote.upvote == True %}
-			<p><a href="{% url 'upvote' pk=post.pk %}"><button id = {{post.pk}} onclick="setColor({{post.pk}})" class="btn btn-success mybutton">Upvotes {{post.like}}</button></a>
-			
+	<div class="allposts">
+		<a href="{% url 'post_details' pk=post.pk %}"><h1>{{post.title}}</h1></a>
+		{% if post.image %}
+		<img class="img-rounded" src="{{post.image.url}}" height="300px" width="550px">
 		{% endif %}
-	{% endfor %} -->
-	
-	{% if post in upvoted_post_list %}
-		<p><a href="{% url 'upvote' pk=post.pk %}"><button id = {{post.pk}} class="btn btn-primary mybutton"><img src="/static/Images/like.png" height="20px" width="30px"> </button></a>
-	{% else %}
-		<p><a href="{% url 'upvote' pk=post.pk %}"><button id = {{post.pk}}  class="btn btn-default mybutton"><img src="/static/Images/like.png" height="20px" width="30px"> </button></a>
-	{% endif %}
-	<a href="{% url 'post_details' pk=post.pk %}"><button class="btn btn-default">Comment</button></a></p>
+		<p>Author : {{post.author}}</p>
+		<p>Category : {{post.category}}</p>
+		<p>Published date : {{post.publish_date}}</p>
+		<p class="text-justify">{{post.text|linebreaksbr}}</p>
+		<p class="bg-info">{{post.like}} likes, {{post.commentcount}} comments</p>
+		<!--{% for upvote in upvotes %}
+			{% if upvote.post == post and upvote.upvote == True %}
+				<p><a href="{% url 'upvote' pk=post.pk %}"><button id = {{post.pk}} onclick="setColor({{post.pk}})" class="btn btn-success mybutton">Upvotes {{post.like}}</button></a>
+				
+			{% endif %}
+		{% endfor %} -->
+		
+		{% if post in upvoted_post_list %}
+			<p><button id = {{post.pk}} class="btn btn-primary mybutton"><img src="/static/Images/like.png" height="20px" width="30px"> </button>
+		{% else %}
+			<p><button id = {{post.pk}}  class="btn btn-default mybutton"><img src="/static/Images/like.png" height="20px" width="30px"> </button>
+		{% endif %}
+		<a href="{% url 'post_details' pk=post.pk %}"><button class="btn btn-default">Comment</button></a></p>
 	</div>
-</div>
 
 {% endfor %}
 {% endblock %}

@@ -11,6 +11,13 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 import datetime
+import requests
+from rest_framework import generics
+from rest_framework.response import Response
+from .serializers import PostSerializer
+from rest_framework.views import APIView
+from rest_framework import status,permissions
+from django.http import HttpResponse, Http404
 def myposts(request):
 	post = Post.objects.filter(author = request.user).order_by('publish_date')
 	return render(request,'blog/posts.html', {'posts':post, 'num_posts':len(post)})
@@ -25,11 +32,16 @@ def deletepost(request):
 def post_list(request):
 	upvoted_post_list = []
 	post = Post.objects.order_by('publish_date')
+	categories = Categories.objects.all()
 	comm = comments.objects.all()
+	url = 'http://api.openweathermap.org/data/2.5/weather?zip=560029,IN&appid=dd9a522daa52cc8af21aafd326bff6c8'
+	req = requests.get(url)
+	### if json response is coming
+	response = req.json()
 	user_upvotes = Upvotes.objects.filter(user=request.user)
 	for upvote in user_upvotes:
 		upvoted_post_list.append(upvote.post)
-	return render(request,'blog/posts.html',{'posts':post, 'comments':comm,'upvoted_post_list':upvoted_post_list})
+	return render(request,'blog/posts.html',{'posts':post, 'comments':comm,'upvoted_post_list':upvoted_post_list,'response':response,'categories':categories})
 def post_new(request):
 	categories = Categories.objects.all()
 	if request.method == "POST":
@@ -51,7 +63,7 @@ def login_view(request):
 		username = request.POST['username']
 		password = request.POST['password']
 		user = authenticate(username = username, password = password)
-		if user is not None :
+		if user :
 			login(request,user)
 			return redirect('post_list')
 		else:
@@ -65,13 +77,6 @@ def signup(request):
             form.save()
             username = form.cleaned_data.get('username')
             raw_password = form.cleaned_data.get('password1')
-            email = form.cleaned_data.get('email')
-
-            subject = 'Thank you for sign up'
-            message = 'Hi, \nThanks for sign up for myblog. Kindly login to myblog.\nRegards,\nSameer Kumar'
-            from_email = settings.EMAIL_HOST_USER
-            to_list = [email,settings.EMAIL_HOST_USER]
-            send_mail(subject,message,from_email, to_list,fail_silently=True)
             user = authenticate(username=username, password=raw_password)
             myprofile = Profile()
             myprofile.user = user
@@ -139,7 +144,7 @@ def comment(request,pk):
 
 def edit(request,pk):
 	comm = get_object_or_404(comments,pk=pk)
-	if comm.author == request.user:
+	if comm.authorprofile.user == request.user:
 		comm.comment = request.POST['comment']
 		comm.save()
 	p_pk = comm.post.pk
@@ -150,7 +155,7 @@ def delete(request,pk):
 	comment = get_object_or_404(comments,pk=pk)
 	post = comment.post
 	post_pk = comment.post.pk
-	if comment.author == request.user:
+	if comment.authorprofile.user == request.user:
 		post.commentcount = post.commentcount - 1
 		post.save()
 		comment.delete()
@@ -188,7 +193,7 @@ def upvotes(request,pk):
 		upv_obj.upvote = True
 		post.save()
 		upv_obj.save()
-	return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+	return HttpResponseRedirect('')
 
 def upvoted_users(request,pk):
 	up_list = []
@@ -218,3 +223,46 @@ def updateDp(request):
 		profile.save()
 		return redirect('profile_view',pk=request.user.pk)
 	return render(request,'blog/updateDp.html',{'profile':profile})
+
+def weather(request):
+	url = 'http://api.openweathermap.org/data/2.5/weather?zip=560029,IN&appid=dd9a522daa52cc8af21aafd326bff6c8'
+	req = requests.get(url)
+	### if json response is coming
+	response = req.json()
+	return render(request,'blog/weather.html',{'response':response})
+def filter(request,pk):
+	category = Categories.objects.get(pk=pk)
+	upvoted_post_list = []
+	post = Post.objects.filter(category=category).order_by('publish_date')
+	categories = Categories.objects.all()
+	comm = comments.objects.all()
+	user_upvotes = Upvotes.objects.filter(user=request.user)
+	for upvote in user_upvotes:
+		upvoted_post_list.append(upvote.post)
+	return render(request,'blog/posts.html',{'posts':post, 'comments':comm,'upvoted_post_list':upvoted_post_list,'categories':categories})
+
+class createPost(generics.CreateAPIView):
+	serializer_class = PostSerializer
+	queryset = Post.objects.all()
+	#permission_classes = (permissions.IsAdminUser,)
+	def get(self,request):
+		queryset = self.get_queryset()
+		serializer = PostSerializer(queryset,many=True)
+		return Response(serializer.data) 
+class removePost(APIView):
+	serializer_class = PostSerializer
+	queryset = Post.objects.all()
+	permission_classes = (permissions.IsAdminUser,)
+	def get_object(self, pk):
+		try:
+			return Post.objects.get(pk=pk)
+		except Post.DoesNotExist:
+			raise Http404
+	def get(self,request,pk):
+		queryset = self.get_object(pk)
+		serializer = PostSerializer(queryset)
+		return Response(serializer.data)
+	def delete(self,request,pk):
+		post = self.get_object(pk)
+		post.delete()
+		return Response(status=status.HTTP_204_NO_CONTENT)

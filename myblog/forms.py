@@ -10,7 +10,7 @@ class loginForm(forms.Form):
 class postForm(forms.ModelForm):
 	class Meta:
 		model = Post
-		fields = ('title', 'text','image','category',)
+		fields = ('title', 'text','image','category','author')
 	def __init__(self, *args, **kwargs):
 		super(postForm, self).__init__(*args, **kwargs)
 		self.fields['title'].required = True

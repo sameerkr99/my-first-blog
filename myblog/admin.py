@@ -7,3 +7,4 @@ admin.site.register(Profile)
 admin.site.register(comments)
 admin.site.register(Upvotes)
 
+

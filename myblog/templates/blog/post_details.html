@@ -1,6 +1,8 @@
 {% extends 'blog/base.html' %}
 {% load static %}
 {% block content %}
+
+<script src="{% static 'jquery/custom.js'%}"></script>
 <div class="row">
 	<div class="col-lg-8 col-lg-offset-2 allposts">
 
@@ -21,11 +23,11 @@
 	</p> -->
 		<p class="bg-info"> <a href="{% url 'upvoted_users' pk=post.pk %}">{{post.like}} likes</a> , {{post.commentcount}} comments </p>
 		{% if post in upvote_posts %}
-			<p><a href="{% url 'upvote' pk=post.pk %}"><button id = {{post.pk}} class="btn btn-primary mybutton"><img src="/static/Images/like.png" height="20px" width="30px"> </button></a>
+			<p><button id = {{post.pk}} class="btn btn-primary mybutton"><img src="/static/Images/like.png" height="20px" width="30px"> </button>
 
 
 		{% else %}
-			<p><a href="{% url 'upvote' pk=post.pk %}"><button id = {{post.pk}}  class="btn btn-default mybutton"><img src="/static/Images/like.png" height="20px" width="30px"> </button></a>
+			<p><button id = {{post.pk}}  class="btn btn-default mybutton"><img src="/static/Images/like.png" height="20px" width="30px"> </button>
 		{% endif %}
 		
 	
@@ -54,11 +56,11 @@
 			</div>
 			<div class="col-lg-3">
 				{% if comment.authorprofile.user == request.user %}
-				<p><button onclick="showDiv({{comment.pk}})" class="btn btn-sm">edit</button>
+				<p><button class="btn btn-sm" id="{{comment.pk}}" >edit</button>
 					<a href="{% url 'delete' pk=comment.pk %}"><button class="btn btn-sm">delete</button></a></p>
 				{% endif %}
 			</div>
-			<div id="{{comment.pk}}" style="display:none;">
+			<div class = "myform" id="{{comment.pk}}" style="display:none;">
 				<form method="POST" action = "{% url 'edit' pk=comment.pk %}">
 					{% csrf_token %}
 					<div class="form-group">
