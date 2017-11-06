@@ -27,7 +27,7 @@ SECRET_KEY = '87!wjnj8yy6@c+g=uaq^gx_)#n5(_v_1g=b&43u_1j+q%%alf!'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1','10.120.253.168']
+ALLOWED_HOSTS = ['127.0.0.1','10.120.253.168','https://myblog1993.pythonanywhere.com']
 
 
 # Application definition
@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'myblog',
     'rest_framework',
-    'django_google_maps',
 ]
 
 MIDDLEWARE = [
@@ -54,7 +53,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 ROOT_URLCONF = 'blogproject.urls'
-GOOGLE_MAPS_API_KEY = 'AIzaSyD2N1EsbtJGZvhcm5-_AP3owi0sfkNQem4'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -126,10 +124,3 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(path,'media')
 STATIC_ROOT = os.path.join(path,'static')
 LOGIN_REDIRECT_URL = '/home/'
-
-from .email_info import EMAIL_USE_TLS,EMAIL_HOST,EMAIL_HOST_USER,EMAIL_HOST_PASSWORD,EMAIL_PORT
-EMAIL_USE_TLS = EMAIL_USE_TLS
-EMAIL_HOST = EMAIL_HOST
-EMAIL_HOST_USER = EMAIL_HOST_USER
-EMAIL_HOST_PASSWORD = EMAIL_HOST_PASSWORD
-EMAIL_PORT = EMAIL_PORT
