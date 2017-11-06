@@ -1,8 +1,27 @@
 {% extends 'blog/base.html' %}
 {% block content %}
-
+<script>
+	var postForm = $( '#post-form' );
+ 
+postForm.on( 'submit', function( e ) {
+    e.preventDefault();
+     
+    $.ajax({
+        url: "{% url 'createpost' %}",
+        method: 'POST',
+        data: postForm.serialize(),
+        crossDomain: true,
+        beforeSend: function ( xhr ) {
+            xhr.setRequestHeader( 'Authorization', 'Basic username:password' );
+        },
+        success: function( data ) {
+            console.log( data );
+        }
+    });
+});
+</script>
 <div class="col-lg-6 col-lg-offset-3 post">
-	<form method = "POST" action = "{% url 'createpost' %}" spellcheck="true" enctype="multipart/form-data">
+	<form name = "post-form" id="post-form" method = "POST" spellcheck="true" enctype="multipart/form-data">
 	{% csrf_token %}
 		
 		{% for field in form %}

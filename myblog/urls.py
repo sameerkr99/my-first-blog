@@ -32,6 +32,7 @@ urlpatterns = [
     url('^', include('django.contrib.auth.urls')),
     url(r'createpost/$',views.createPost.as_view(), name = 'createpost'),
     url(r'removepost/(?P<pk>\d+)/$',views.removePost.as_view()),
+    url(r'apitesting/$',views.testapi),
 
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
