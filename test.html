@@ -1,0 +1,324 @@
+<html>
+	<head>
+		<title>
+			welcome
+		</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<script type = "text/javascript" language = "javascript">
+        	$(document).ready(function(){
+        		$('a.other').click(function(){
+        			$('ul.tabsclass').toggle();
+        		});
+        		$('a.tabsclass').click(function(){
+        			var v = $(this).text();
+        			$('a.other').text(v);
+        			$('ul.tabsclass').hide();
+        		});
+        		$(document).click(function(){
+        			$('ul.tabsclass').hide();
+        		});
+        	});
+        </script>
+		<style type="text/css">
+		
+		</style>
+	</head>
+<body>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-12">
+				<nav class="navbar navbar-inverse" role="navigation">
+					<div class="navbar-header">
+						 
+						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+							 <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+						</button> <a class="navbar-brand" href="#">Website</a>
+					</div>
+					
+					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+						<ul class="nav navbar-nav navbar-right">
+							<li>
+								<a href="#">Updates</a>
+							</li>
+							<li>
+								<a href="#">Alerts</a>
+							</li>
+							<li>
+								<a href="#">Login</a>
+							</li>
+							<li>
+								<a href="#">Register</a>
+							</li>
+						</ul>
+						<form class="navbar-form navbar-right" role="search">
+							<div class="form-group">
+								<input type="text" class="form-control" placeholder="search here" />
+							</div> 
+							<button type="submit" class="btn btn-default">
+								Search
+							</button>
+						</form>
+					</div>
+				
+				</nav>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="tabbable" id="tabs-128498">
+					<ul class="nav nav-tabs">
+						<li class="active">
+							<a href="#tab-1" data-toggle="tab"><span>Bitcoin</span></a>
+						</li>
+						<li>
+							<a href="#tab-2" data-toggle="tab"><span>Ripple</span></a>
+						</li>
+						<li>
+							<a href="#tab-3" data-toggle="tab"><span>Etherum</span></a>
+						</li>
+						
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle other" data-toggle="dropdown">Others<strong></strong></a>
+							<ul class="dropdown-menu">
+								<li>
+									<a href="#tab-4" data-toggle="tab" class="tabsclass"><span>Lite Coin</span></a>
+								</li>
+								<li>
+									<a href="#tab-5" data-toggle="tab" class = "tabsclass"><span>Bitcoin Cash</span></a>
+								</li>
+							</ul>
+						</li>
+						</ul>
+							
+					
+					<div class="tab-content">
+						<div class="tab-pane active" id="tab-1">
+							<p>
+								<table class="table table-hover">
+									<thead>
+										<tr>
+											<th>
+												#
+											</th>
+											<th>
+												Price(INR)
+											</th>
+											<th>
+												Change(%)
+											</th>
+											
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>
+												Koinex
+											</td>
+											<td>
+												1 M
+											</td>
+											<td>
+												+3 %
+											</td>
+										</tr>
+										<tr>
+											<td>
+												Bitbns
+											</td>
+											<td>
+												1.1 M
+											</td>
+											<td>
+												+2 %
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</p>
+						</div>
+						<div class="tab-pane" id="tab-2">
+							<p>
+								<table class="table table-hover">
+									<thead>
+										<tr>
+											<th>
+												#
+											</th>
+											<th>
+												Price(INR)
+											</th>
+											<th>
+												Change(%)
+											</th>
+											
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>
+												Koinex
+											</td>
+											<td>
+												5 M
+											</td>
+											<td>
+												+6 %
+											</td>
+										</tr>
+										<tr>
+											<td>
+												Bitbns
+											</td>
+											<td>
+												5.1 M
+											</td>
+											<td>
+												+5 %
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</p>
+						</div>
+						<div class="tab-pane" id="tab-3">
+							<p>
+								<table class="table table-hover">
+									<thead>
+										<tr>
+											<th>
+												#
+											</th>
+											<th>
+												Price(INR)
+											</th>
+											<th>
+												Change(%)
+											</th>
+											
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>
+												Koinex
+											</td>
+											<td>
+												2 M
+											</td>
+											<td>
+												+4 %
+											</td>
+										</tr>
+										<tr>
+											<td>
+												Bitbns
+											</td>
+											<td>
+												2.1 M
+											</td>
+											<td>
+												+8 %
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</p>
+						</div>
+						<div class="tab-pane" id="tab-4">
+							<p>
+								<table class="table table-hover">
+									<thead>
+										<tr>
+											<th>
+												#
+											</th>
+											<th>
+												Price(INR)
+											</th>
+											<th>
+												Change(%)
+											</th>
+											
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>
+												Koinex
+											</td>
+											<td>
+												3 M
+											</td>
+											<td>
+												+5 %
+											</td>
+										</tr>
+										<tr>
+											<td>
+												Bitbns
+											</td>
+											<td>
+												3.1 M
+											</td>
+											<td>
+												+5 %
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</p>
+						</div>
+						<div class="tab-pane" id="tab-5">
+							<p>
+								<table class="table table-hover">
+									<thead>
+										<tr>
+											<th>
+												#
+											</th>
+											<th>
+												Price(INR)
+											</th>
+											<th>
+												Change(%)
+											</th>
+											
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>
+												Koinex
+											</td>
+											<td>
+												4 M
+											</td>
+											<td>
+												+9 %
+											</td>
+										</tr>
+										<tr>
+											<td>
+												Bitbns
+											</td>
+											<td>
+												4.1 M
+											</td>
+											<td>
+												+9 %
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</p>
+						</div>
+					</div>
+				</div>
+				
+			</div>
+		</div>
+	</div>
+</body>
+</html>
